@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare, float_is_zero
 
 class EstatePropertyModel(models.Model):
     _name = 'estate.property'
@@ -28,6 +29,12 @@ class EstatePropertyModel(models.Model):
     offer_ids = fields.One2many("estate.property.offer", "property_id")
     total_area = fields.Float(compute="_compute_total_area")
     best_price = fields.Float(compute="_compute_best_price", store=True, default=0.0)
+
+    _sql_constraints = [
+        ('check_expected_price', 'CHECK(expected_price > 0)', 'El precio esperado debe ser positivo'),
+        ('check_selling_price', 'CHECK(selling_price > 0)', 'El precio de venta debe ser positivo'),
+        ('unique_name', 'UNIQUE(property_type_id , name)', 'El nombre de la propiedad debe ser único'),
+    ]
 
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
@@ -74,3 +81,21 @@ class EstatePropertyModel(models.Model):
             record.state = 'sold'
         return True
     
+    @api.constrains('offer_ids.price')
+    def _check_offer_price(self):
+        for record in self:
+            for offer in record.offer_ids:
+                if offer.price <= 0:
+                    raise ValidationError('El precio de la oferta debe ser estrictamente positivo.')
+
+    @api.onchange('expected_price', 'selling_price')
+    def _onchange_price(self):
+        if not float_is_zero(self.selling_price, precision_digits=2) and float_compare(self.selling_price, self.expected_price * 0.9, precision_digits=2) == -1:
+            self.selling_price = self.expected_price * 0.9
+
+    @api.constrains('expected_price', 'selling_price')
+    def _check_selling_price(self):
+        for record in self:
+            if not float_is_zero(record.selling_price, precision_digits=2) and float_compare(record.selling_price, record.expected_price * 0.9, precision_digits=2) == -1:
+                raise ValidationError('El precio de venta no puede ser inferior al 90% del precio esperado.')
+            
