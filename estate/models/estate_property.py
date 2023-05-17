@@ -3,7 +3,7 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare, float_is_zero
 
-class EstatePropertyModel(models.Model):
+class EstateProperty(models.Model):
     _name = 'estate.property'
     _description = 'Estate Property Model'
 
@@ -31,9 +31,9 @@ class EstatePropertyModel(models.Model):
     best_price = fields.Float(compute="_compute_best_price", store=True, default=0.0)
 
     _sql_constraints = [
-        ('check_expected_price', 'CHECK(expected_price > 0)', 'El precio esperado debe ser positivo'),
-        ('check_selling_price', 'CHECK(selling_price > 0)', 'El precio de venta debe ser positivo'),
-        ('unique_name', 'UNIQUE(property_type_id , name)', 'El nombre de la propiedad debe ser único'),
+        ('check_expected_price', 'CHECK(expected_price > 0)', 'The expected price must be positive'),
+        ('check_selling_price', 'CHECK(selling_price > 0)', 'The selling price must be positive'),
+        ('unique_name', 'UNIQUE(property_type_id , name)', 'The name of the property must be unique'),
     ]
 
     @api.depends('living_area', 'garden_area')
@@ -64,7 +64,7 @@ class EstatePropertyModel(models.Model):
               continue
 
             if record.state == 'sold':
-              raise UserError("No se puede cancelar una propiedad vendida")
+              raise UserError("A sold property cannot be cancelled")
 
 
             record.state = 'canceled'
@@ -73,7 +73,7 @@ class EstatePropertyModel(models.Model):
     def action_sold(self):
         for record in self:
             if record.state == 'canceled':
-              raise UserError("No se puede vender una propiedad cancelada")
+              raise UserError("A cancelled property cannot be sold")
 
             if record.state == 'sold':
               continue
@@ -86,7 +86,7 @@ class EstatePropertyModel(models.Model):
         for record in self:
             for offer in record.offer_ids:
                 if offer.price <= 0:
-                    raise ValidationError('El precio de la oferta debe ser estrictamente positivo.')
+                    raise ValidationError('The offer price must be strictly positive')
 
     @api.onchange('expected_price', 'selling_price')
     def _onchange_price(self):
@@ -97,5 +97,5 @@ class EstatePropertyModel(models.Model):
     def _check_selling_price(self):
         for record in self:
             if not float_is_zero(record.selling_price, precision_digits=2) and float_compare(record.selling_price, record.expected_price * 0.9, precision_digits=2) == -1:
-                raise ValidationError('El precio de venta no puede ser inferior al 90% del precio esperado.')
+                raise ValidationError('The selling price cannot be less than 90% of the expected price')
             

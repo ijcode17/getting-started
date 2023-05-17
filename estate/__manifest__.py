@@ -3,6 +3,7 @@
     'summary': 'Real estate module of the technical course getting started with odoo',
     'version': '16.0.1.0.0',
     'author': 'Vauxoo',
+    'category': 'Installer',
     'depends': [
         'base',
     ],
@@ -15,5 +16,6 @@
         'views/estate_menus.xml',
     ],
     "application": True,
+    "installable": True,
 }
 
