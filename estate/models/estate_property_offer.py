@@ -2,7 +2,7 @@ from datetime import timedelta, datetime
 from odoo import api, fields, models
 from odoo.exceptions import UserError
 
-class EstatePropertyOfferModel(models.Model):
+class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Estate Property Offer Model"
     _order = "price desc"
@@ -26,12 +26,12 @@ class EstatePropertyOfferModel(models.Model):
     def action_accept(self):
         for record in self:
             if record.status == 'accepted':
-                raise UserError("Ya se ha aceptado esta oferta")
+                raise UserError("This offer has already been accepted")
             
             property_offers = self.env['estate.property.offer'].search([('property_id', '=', record.property_id.id), ('status', '=', 'accepted')])
 
             if property_offers: 
-                raise UserError("Ya se ha aceptado otra oferta para esta propiedad")
+                raise UserError("This property already has an accepted offer")
 
             record.property_id.buyer_id = record.partner_id.id
             record.property_id.selling_price = record.price
