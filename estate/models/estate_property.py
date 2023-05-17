@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare, float_is_zero
 
@@ -64,7 +64,7 @@ class EstateProperty(models.Model):
               continue
 
             if record.state == 'sold':
-              raise UserError("A sold property cannot be cancelled")
+              raise UserError(_("A sold property cannot be cancelled"))
 
 
             record.state = 'canceled'
@@ -73,7 +73,7 @@ class EstateProperty(models.Model):
     def action_sold(self):
         for record in self:
             if record.state == 'canceled':
-              raise UserError("A cancelled property cannot be sold")
+              raise UserError(_("A cancelled property cannot be sold"))
 
             if record.state == 'sold':
               continue
@@ -86,7 +86,7 @@ class EstateProperty(models.Model):
         for record in self:
             for offer in record.offer_ids:
                 if offer.price <= 0:
-                    raise ValidationError('The offer price must be strictly positive')
+                    raise ValidationError(_('The offer price must be strictly positive'))
 
     @api.onchange('expected_price', 'selling_price')
     def _onchange_price(self):
@@ -97,5 +97,5 @@ class EstateProperty(models.Model):
     def _check_selling_price(self):
         for record in self:
             if not float_is_zero(record.selling_price, precision_digits=2) and float_compare(record.selling_price, record.expected_price * 0.9, precision_digits=2) == -1:
-                raise ValidationError('The selling price cannot be less than 90% of the expected price')
+                raise ValidationError(_('The selling price cannot be less than 90% of the expected price'))
             
