@@ -33,10 +33,12 @@ class EstatePropertyOffer(models.Model):
             if property_offers: 
                 raise UserError(_("This property already has an accepted offer"))
 
-            record.property_id.buyer_id = record.partner_id.id
-            record.property_id.selling_price = record.price
-            record.status = 'accepted'
-            record.property_id.state = 'offer_accepted'
+            record.property_id.write({
+                'buyer_id': record.partner_id.id,
+                'selling_price': record.price,
+                'state': 'offer_accepted',
+            })
+            record.status= 'accepted'
         return True
     
     def action_cancel(self):

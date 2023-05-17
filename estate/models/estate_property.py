@@ -59,24 +59,18 @@ class EstateProperty(models.Model):
             self.garden_orientation = False
 
     def action_cancel(self):
-        for record in self:
-            if record.state == 'canceled':
-              continue
+        for record in self.filtered(lambda r: r.state != 'canceled'):
 
             if record.state == 'sold':
               raise UserError(_("A sold property cannot be cancelled"))
-
 
             record.state = 'canceled'
         return True
     
     def action_sold(self):
-        for record in self:
+        for record in self.filtered(lambda r: r.state != 'sold'):
             if record.state == 'canceled':
               raise UserError(_("A cancelled property cannot be sold"))
-
-            if record.state == 'sold':
-              continue
 
             record.state = 'sold'
         return True

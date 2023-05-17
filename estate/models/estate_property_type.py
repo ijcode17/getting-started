@@ -9,5 +9,3 @@ class EstatePropertyType(models.Model):
     _sql_constraints = [
         ('unique_name', 'UNIQUE(name)', "The name of the property type must be unique")
     ]
-
-    
