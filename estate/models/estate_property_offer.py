@@ -62,3 +62,6 @@ class EstatePropertyOffer(models.Model):
             raise UserError(_("The offer must be greater than ") + str(max_offer))
         property.state = "offer_received"
         return super().create(vals)
+
+    def find_accepted_offer(self):
+        return self.property_id.offer_ids.filtered(lambda element: element.status == "accepted")
