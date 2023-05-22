@@ -52,3 +52,13 @@ class EstatePropertyOffer(models.Model):
         for record in self:
             record.status = "refused"
         return True
+
+    @api.model
+    def create(self, vals):
+        property = self.env["estate.property"].browse(vals["property_id"])
+        offers = property.offer_ids
+        max_offer = max(offers.mapped("price"), default=0)
+        if vals["price"] <= max_offer:
+            raise UserError(_("The offer must be greater than ") + str(max_offer))
+        property.state = "offer_received"
+        return super().create(vals)
