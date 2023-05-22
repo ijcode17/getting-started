@@ -5,7 +5,7 @@ class EstatePropertyType(models.Model):
     _name = "estate.property.type"
     _description = "Estate property type Model"
 
-    name = fields.Char(string="Nombre del tupo", required=True)
+    name = fields.Char(required=True)
     property_ids = fields.One2many("estate.property", "property_type_id")
     sequence = fields.Integer()
     offer_ids = fields.One2many("estate.property.offer", "property_type_id")
