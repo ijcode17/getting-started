@@ -3,12 +3,13 @@
     "summary": "Real estate module of the technical course getting started with odoo",
     "version": "16.0.1.0.0",
     "author": "Vauxoo",
-    "category": "Installer",
+    "category": "Real Estate/Brokerage",
     "depends": [
         "base",
     ],
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "views/estate_property_views.xml",
         "views/estate_property_type_views.xml",
         "views/estate_property_tag_views.xml",
