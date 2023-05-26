@@ -165,6 +165,14 @@
               <group>
                 <field name="total_area" />
               </group>
+
+              <group>
+                <field name="state" />
+              </group>
+
+              <group>
+                <field name="company_id" />
+              </group>
             </page>
 
             <page string="Offers">

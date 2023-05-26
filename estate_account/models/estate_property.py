@@ -5,6 +5,13 @@ class EstateProperty(models.Model):
     _inherit = "estate.property"
 
     def action_sold(self):
+        print(" reached ".center(100, "="))
+
+        self = self.sudo()
+
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         accepted_offer = self.offer_ids.find_accepted_offer()
         journal = self.env["account.journal"].search([("type", "=", "sale")], limit=1)
         self.env["account.move"].create(
