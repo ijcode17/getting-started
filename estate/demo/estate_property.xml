@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+<odoo noupdate="1">
+  <record id="estate_property_big_villa" model="estate.property">
+    <field name="name">Big Villa</field>
+    <field name="property_type_id" ref="estate.property_type_residential" />
+    <field name="state">new</field>
+    <field name="description">A nice and big villa</field>
+    <field name="postcode">12345</field>
+    <field name="date_availability" eval="'2020-02-02'" />
+    <field name="expected_price">1600000</field>
+    <field name="bedrooms">6</field>
+    <field name="living_area">100</field>
+    <field name="facades">4</field>
+    <field name="garage">True</field>
+    <field name="garden">True</field>
+    <field name="garden_area">100000</field>
+    <field name="garden_orientation">south</field>
+    <field name="salesman_id" ref="base.user_admin" />
+  </record>
+
+  <record id="estate_property_trailer_home" model="estate.property">
+    <field name="name">Trailer home</field>
+    <field name="property_type_id" ref="estate.property_type_residential" />
+    <field name="state">canceled</field>
+    <field name="description">Home in a trailer park</field>
+    <field name="postcode">54321</field>
+    <field name="date_availability" eval="'1970-01-01'" />
+    <field name="expected_price">100000</field>
+    <field name="selling_price">120000</field>
+    <field name="bedrooms">1</field>
+    <field name="living_area">10</field>
+    <field name="facades">4</field>
+    <field name="garage">False</field>
+    <field name="salesman_id" ref="base.user_admin" />
+  </record>
+
+  <record id="estate_property_beautiful_home" model="estate.property">
+    <field name="name">Beautiful home</field>
+    <field name="property_type_id" ref="estate.property_type_residential" />
+    <field name="state">new</field>
+    <field name="description">The best house</field>
+    <field name="postcode">74563</field>
+    <field name="date_availability" eval="'2017-11-17'" />
+    <field name="expected_price">757000</field>
+    <field name="selling_price">770000</field>
+    <field name="bedrooms">3</field>
+    <field name="living_area">50</field>
+    <field name="facades">6</field>
+    <field name="garage">True</field>
+    <field name="salesman_id" ref="base.user_admin" />
+    <field
+            name="offer_ids"
+            eval="[
+      Command.create({
+        'partner_id': 13,
+        'price': 780000,
+        'validity': 7,
+      }),
+      Command.create({
+        'partner_id': 7,
+        'price': 795000,
+        'validity': 9,
+      }),
+    ]"
+        />
+  </record>
+
+  <record id="demo_offer_big_villa1" model="estate.property.offer">
+    <field name="partner_id">14</field>
+    <field name="property_id" ref="estate_property_big_villa" />
+    <field name="price">10000</field>
+    <field name="validity">14</field>
+  </record>
+
+  <record id="demo_offer_big_villa2" model="estate.property.offer">
+    <field name="partner_id">14</field>
+    <field name="property_id" ref="estate_property_big_villa" />
+    <field name="price">1500000</field>
+    <field name="validity">14</field>
+  </record>
+
+  <record id="demo_offer_big_villa3" model="estate.property.offer">
+    <field name="partner_id">10</field>
+    <field name="property_id" ref="estate_property_big_villa" />
+    <field name="price">1500001</field>
+    <field name="validity">14</field>
+  </record>
+
+  <function model="estate.property.offer" name="action_accept">
+    <value eval="ref('demo_offer_big_villa2')" />
+  </function>
+
+  <function model="estate.property.offer" name="action_cancel">
+    <value eval="ref('demo_offer_big_villa1')" />
+  </function>
+
+  <function model="estate.property.offer" name="action_cancel">
+    <value eval="ref('demo_offer_big_villa3')" />
+  </function>
+</odoo>
