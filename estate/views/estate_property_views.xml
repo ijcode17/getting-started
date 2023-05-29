@@ -72,6 +72,7 @@
     <field name="arch" type="xml">
       <form string="Estate Property">
         <header>
+        <button name="estate.report_estate_property" string="Print" type="action" class="oe_highlight" />
           <button
                         name="action_cancel"
                         type="object"

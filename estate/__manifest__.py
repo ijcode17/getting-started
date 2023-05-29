@@ -9,6 +9,11 @@
     ],
     "data": [
         "data/estate.property.type.csv",
+        "report/estate_property_report.xml",
+        "report/estate_property_table_template.xml",
+        "report/estate_property_template.xml",
+        "report/res_users_report_template.xml",
+        "report/res_users_report.xml",
         "security/ir.model.access.csv",
         "security/security.xml",
         "views/estate_property_views.xml",
