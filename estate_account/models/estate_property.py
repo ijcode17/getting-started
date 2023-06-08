@@ -1,11 +1,12 @@
 from odoo import Command, models
+import logging
 
 
 class EstateProperty(models.Model):
     _inherit = "estate.property"
 
     def action_sold(self):
-        print(" reached ".center(100, "="))
+        logging.info(" reached ".center(100, "="))
 
         self = self.sudo()
 
