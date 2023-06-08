@@ -11,7 +11,7 @@
                         <div>
                             <p>
                                 <strong>Salesman: </strong>
-                                <span t-field="property.salesperson_id" />
+                                <span t-field="property.salesman_id" />
                             </p>
                             <p>
                                 <strong>Expected Price: </strong>
